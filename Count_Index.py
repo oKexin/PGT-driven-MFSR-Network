@@ -18,8 +18,7 @@ def normalized(image):
 def dowmsampling(image, h_ratio, w_ratio, flag = True):
     h, w = image.shape[:2]
     if flag:
-        lr_patch = cv2.resize(image, (w // w_ratio, h // h_ratio),
-                              interpolation=cv2.INTER_CUBIC)
+        lr_patch = image[::h_ratio, ::w_ratio]
     else:
         lr_patch = np.zeros((h, w), dtype=image.dtype)
         lr_patch[::h_ratio, ::w_ratio] = image[::h_ratio, ::w_ratio]
@@ -132,6 +131,7 @@ if __name__ == '__main__':
     var_psnr = statistics.pstdev(total_psnr)
     var_lpips = statistics.pstdev(total_lpips)
     print(f"{maen_ssim:.4f}-{var_ssim:.4f}, {maen_psnr:.2f}-{var_psnr:.2f}, {maen_lpips:.4f}-{var_lpips:.4f}")
+
 
 
 
