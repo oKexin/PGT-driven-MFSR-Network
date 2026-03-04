@@ -165,18 +165,17 @@ class _UpsampleBlock(nn.Module):
             self.PixelShuffle3D_2,
         ]
         if self.scale_factor == 4:
-            num_blocks = 2  # 2次2倍上采样
+            num_blocks = 2 
         elif self.scale_factor == 2:
-            num_blocks = 1  # 1次2倍上采样
+            num_blocks = 1
         elif self.scale_factor == 6:
             # 2倍 + 3倍
             num_blocks = 2
         else:  # scale_factor == 8
-            num_blocks = 3  # 3次2倍上采样
+            num_blocks = 3 
         upsample_layers = []
         for i in range(num_blocks):
             if i == num_blocks - 1 and scale_factor == 6:
-                # 6倍上采样的最后一层使用3倍上采样
                 upsample_layers += [
                     nn.Conv3d(channels, channels * 9, 3, 1, 1),
                     nn.LeakyReLU(),
@@ -191,13 +190,12 @@ class _UpsampleBlock(nn.Module):
 class PixelShuffle3D(nn.Module):
     def __init__(self, spatial_scale):
         super().__init__()
-        self.spatial_scale = spatial_scale  # 仅空间维度上采样倍数
+        self.spatial_scale = spatial_scale 
 
     def forward(self, x):
         B, C, T, H, W = x.shape
         scale = self.spatial_scale
-        C_out = C // (scale * scale)  # 输出通道数
-        # 重塑并洗牌空间维度
+        C_out = C // (scale * scale)  
         x = x.view(B, C_out, scale, scale, T, H, W)
         x = x.permute(0, 1, 4, 5, 2, 6, 3).contiguous()  # [B, C_out, T, H, scale, W, scale]
         x = x.view(B, C_out, T, H * scale, W * scale)
@@ -269,3 +267,4 @@ if __name__ == '__main__':
     a = net(sequence)
 
     print(a.size())
+
