@@ -19,8 +19,6 @@ warnings.filterwarnings("ignore", category=UserWarning)
 def get_all_folders(path):
     folder_paths = []
     for root, dirs, files in os.walk(path):
-        # root 是当前遍历到的目录路径
-        # dirs 是当前目录下的子文件夹列表
         for directory in dirs:
             folder_path = os.path.join(root, directory)
             folder_paths.append(folder_path)
@@ -150,3 +148,4 @@ if __name__ == '__main__':
     plt.plot(x, y, color="red")
 
     plt.show()
+
