@@ -64,8 +64,7 @@ if __name__ == '__main__':
         os.makedirs(opt.out)
     except OSError:
         pass
-    # 初始化TensorBoard写入器
-    # 生成唯一的实验文件夹名称（包含时间戳和关键参数）
+    # init TensorBoard
     timestamp = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
     experiment_name = f"exp_{timestamp}"
     log_dir = os.path.join("runs", experiment_name)
@@ -95,16 +94,16 @@ if __name__ == '__main__':
     print('Training Start')
     for epoch in range(opt.StartEpochs, opt.nEpochs):
         epoch_start_time = time.time()
-        # 训练阶段
+        # Training
         generator.train()
         epoch_loss = 0.0
         mean_pixel_loss = 0.0
         mean_ssim_loss = 0.0
         for batch_idx, (lr_seq, hr_target, hr_seq) in enumerate(train_loader):
-            batch_size = lr_seq.size(0)  # 动态获取当前批次大小
+            batch_size = lr_seq.size(0) 
             lr_seq = lr_seq.to(device)
             hr_seq = hr_seq.to(device)
-            # 计算初始输入帧间相似度
+
             hr_seq_reshaped = hr_seq.view(-1, c, h, w)
             hr_middle_frame = hr_seq[:, middle_frame_idx, ...]
             middle_expanded_reshaped = hr_middle_frame.unsqueeze(1).repeat(1, opt.num_frames, 1, 1, 1).view(-1, c, h, w)
@@ -148,4 +147,5 @@ if __name__ == '__main__':
     plt.plot(x, y, color="red")
 
     plt.show()
+
 
